@@ -111,50 +111,6 @@ class BrTitleInfo(models.Model):
         return "%s%s" % (self.sigungucd, self.bjdongcd)
 
 
-class UnitsSido(models.Model):
-    sidocd = models.IntegerField(db_column='sidoCd', primary_key=True)  # Field name made lowercase.
-    sinm = models.CharField(db_column='siNm', max_length=20)  # Field name made lowercase.
-    sinmeng = models.CharField(db_column='siNmEng', max_length=40)  # Field name made lowercase.
-    treeord = models.IntegerField(db_column='treeOrd', blank=True, null=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'units_sido'
-
-
-class UnitsSgg(models.Model):
-    sggcd = models.IntegerField(db_column='sggCd', primary_key=True)  # Field name made lowercase.
-    sidocd = models.ForeignKey('UnitsSido', related_name='sgg', db_column='sidoCd', on_delete=models.CASCADE)  # Field name made lowercase.
-    sggnm = models.CharField(db_column='sggNm', max_length=20)  # Field name made lowercase.
-    sggnmeng = models.CharField(db_column='sggNmEng', max_length=40)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'units_sgg'
-
-
-class UnitsRoad(models.Model):
-    roadcd = models.IntegerField(db_column='roadCd', primary_key=True)  # Field name made lowercase.
-    sggcd = models.ForeignKey('UnitsSgg', related_name='road', db_column='sggCd', on_delete=models.CASCADE)  # Field name made lowercase.
-    roadnm = models.CharField(db_column='roadNm', max_length=20)  # Field name made lowercase.
-    roadnmeng = models.CharField(db_column='roadNmEng', max_length=40)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'units_road'
-
-
-class UnitsEmd(models.Model):
-    emdcd = models.IntegerField(db_column='emdCd', primary_key=True)  # Field name made lowercase.
-    sggcd = models.ForeignKey('UnitsSgg', related_name='emd', db_column='sggCd', on_delete=models.CASCADE)  # Field name made lowercase.
-    emdnm = models.CharField(db_column='emdNm', max_length=20)  # Field name made lowercase.
-    emdnmeng = models.CharField(db_column='emdNmEng', max_length=40)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'units_emd'
-
-
 class Units(models.Model):
     id = models.CharField(db_column='id', max_length=12, primary_key=True)
     level = models.CharField(max_length=1, blank=True, null=True)
@@ -163,4 +119,42 @@ class Units(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'units'
+        db_table = 'addr_units'
+
+
+class Realtors(models.Model):
+    reg_dt = models.DateTimeField(blank=True, null=True)
+    mng_no = models.CharField(max_length=20, blank=True, null=True)
+    reg_no = models.CharField(max_length=100, blank=True, null=True)
+    biz_name = models.CharField(primary_key=True, max_length=100)
+    biz_tel = models.CharField(max_length=20, blank=True, null=True)
+    rep_name = models.CharField(max_length=50)
+    rep_tel = models.CharField(max_length=20, blank=True, null=True)
+    addr_raw = models.CharField(max_length=200, blank=True, null=True)
+    temp = models.CharField(max_length=5, blank=True, null=True)
+    sinm = models.CharField(db_column='siNm', max_length=20, blank=True, null=True)  # Field name made lowercase.
+    sggnm = models.CharField(db_column='sggNm', max_length=20, blank=True, null=True)  # Field name made lowercase.
+    rn = models.CharField(max_length=80, blank=True, null=True)
+    udrtyn = models.CharField(db_column='udrtYn', max_length=1, blank=True, null=True)  # Field name made lowercase.
+    buldmnnm = models.IntegerField(db_column='buldMnnm', blank=True, null=True)  # Field name made lowercase.
+    buldslno = models.IntegerField(db_column='buldSlno', blank=True, null=True)  # Field name made lowercase.
+    emdnm = models.CharField(db_column='emdNm', max_length=20, blank=True, null=True)  # Field name made lowercase.
+    linm = models.CharField(db_column='liNm', max_length=20, blank=True, null=True)  # Field name made lowercase.
+    mtyn = models.CharField(db_column='mtYn', max_length=1, blank=True, null=True)  # Field name made lowercase.
+    lnbrmnnm = models.IntegerField(db_column='lnbrMnnm', blank=True, null=True)  # Field name made lowercase.
+    lnbrslno = models.IntegerField(db_column='lnbrSlno', blank=True, null=True)  # Field name made lowercase.
+    addr_detail = models.CharField(max_length=40, blank=True, null=True)
+    full_addr_rn = models.CharField(max_length=200, blank=True, null=True)
+    full_addr_jibun = models.CharField(max_length=200, blank=True, null=True)
+    bdmgtsn = models.CharField(db_column='bdMgtSn', max_length=25, blank=True, null=True)  # Field name made lowercase.
+    srlno = models.CharField(db_column='srlNo', max_length=3, blank=True, null=True)  # Field name made lowercase.
+    # dongcd = models.CharField(db_column='dongCd', max_length=10, blank=True, null=True)  # Field name made lowercase.
+    dongcd = models.ForeignKey('Units', on_delete=models.CASCADE, related_name='realtors_emd', db_column='dongCd')
+    # rnmgtsn = models.CharField(db_column='rnMgtSn', max_length=12, blank=True, null=True)  # Field name made lowercase.
+    rnmgtsn = models.ForeignKey('Units', on_delete=models.CASCADE, related_name='realtors_road', db_column='rnMgtSn')
+    emdno = models.CharField(db_column='emdNo', max_length=2, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'realtors'
+        unique_together = (('biz_name', 'rep_name'),)

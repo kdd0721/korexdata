@@ -1,11 +1,10 @@
-from django.db.models.functions import Length
-from django.shortcuts import render
 from .get_br_title_info import parsing
-from address.serializers import BrTitleInfoSerializer, SidoRoadSerializer, SidoEmdSerializer
-from address.models import BrTitleInfo, Units
+from address.serializers import BrTitleInfoSerializer, SidoRoadSerializer, SidoEmdSerializer, UnitSerializer, RealtorsSerializer
+from address.models import BrTitleInfo, Units, Realtors
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import renderers, viewsets
+from .pagination import SidoPageNumberPagination
 
 
 class BrTitleInfoViewSet(viewsets.ModelViewSet):
@@ -45,18 +44,36 @@ class EmdViewSet(viewsets.ModelViewSet):
 
 
 class UnitViewSet(viewsets.ModelViewSet):
-    queryset = Units.objects.filter(level='1')
-    serializer_class = SidoRoadSerializer
+    queryset = Realtors.objects.all()
+    serializer_class = RealtorsSerializer
+    pagination_class = SidoPageNumberPagination
+
+    @action(methods=['get'], detail=False)
+    def sido(self, request):
+        qs = Units.objects.filter(level='1')
+        serializer = UnitSerializer(qs, many=True)
+        return Response(serializer.data)
+
+    @action(methods=['get'], detail=False)
+    def sgg(self, request):
+        qs = Units.objects.filter(level='2')
+        serializer = UnitSerializer(qs, many=True)
+        return Response(serializer.data)
 
     @action(methods=['get'], detail=False)
     def road(self, request):
-        qs = Units.objects.filter(level='1')
-        serializer = SidoRoadSerializer(qs, many=True)
+        qs = Units.objects.filter(level='3', realtors_road__isnull=False).distinct()
+        serializer = UnitSerializer(qs, many=True)
         return Response(serializer.data)
 
     @action(methods=['get'], detail=False)
     def emd(self, request):
-        qs = Units.objects.filter(level='1')
-        serializer = SidoEmdSerializer(qs, many=True)
+        qs = Units.objects.filter(level='4', realtors_emd__isnull=False).distinct()
+        serializer = UnitSerializer(qs, many=True)
         return Response(serializer.data)
 
+    @action(methods=['get'], detail=False)
+    def realtors(self, request):
+        qs = Realtors.objects.all()
+        serializer = RealtorsSerializer(qs, many=True)
+        return Response(serializer.data)
