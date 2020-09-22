@@ -1,7 +1,8 @@
 import requests
 import xmltodict
 
-#items model def로 선언하기
+
+# items model def로 선언하기
 def parsing(sgg_cd, bjdong_cd, bun, ji):
     # public api settings
     key = "hR1c9PXeUu2s6g0W0KyWCDzf6LJz810huqBy9f6mt6qclvP8G4F3MZV%2FKr52W%2FSss%2BIto1locQn5snYAkY60wg%3D%3D"

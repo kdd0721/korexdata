@@ -1,5 +1,5 @@
 from .get_br_title_info import parsing
-from address.serializers import BrTitleInfoSerializer, SidoRoadSerializer, SidoEmdSerializer, UnitSerializer, RealtorsSerializer
+from address.serializers import BrTitleInfoSerializer, UnitSerializer, RealtorsSerializer
 from address.models import BrTitleInfo, Units, Realtors
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -16,7 +16,7 @@ class BrTitleInfoViewSet(viewsets.ModelViewSet):
         sgg_cd = "11680"  # 시군구코드
         bjdong_cd = "10300"  # 법정동코드
         bun = "0012"  # 번
-        ji = "0004"  # 지
+        ji = "0003"  # 지
         info = parsing(sgg_cd, bjdong_cd, bun, ji)
         br_title_info = BrTitleInfo(
             platplc=info['platPlc'],
@@ -26,21 +26,11 @@ class BrTitleInfoViewSet(viewsets.ModelViewSet):
             bun=bun,
             ji=ji,
             archarea=info['archArea'],
+            mainpurpscdnm=info['mainPurpsCdNm'],
             grndflrcnt=info['grndFlrCnt'])
         br_title_info.save()
         serializer = BrTitleInfoSerializer(br_title_info)
         return Response(serializer.data)
-
-"""
-class RoadViewSet(viewsets.ModelViewSet):
-    queryset = UnitsSido.objects.all()
-    serializer_class = RoadSerializer
-
-
-class EmdViewSet(viewsets.ModelViewSet):
-    queryset = UnitsSido.objects.all()
-    serializer_class = EmdSerializer
-"""
 
 
 class UnitViewSet(viewsets.ModelViewSet):

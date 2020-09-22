@@ -1,22 +1,22 @@
-from django.db.models import Q
 from rest_framework import serializers
 from address.models import BrTitleInfo, Units, Realtors
 from rest_framework_recursive.fields import RecursiveField
 from drf_serializer_cache import SerializerCacheMixin
-from django.db.models import F
+from django.db.models import Q, F
 
 
-class BrTitleInfoSerializer(serializers.HyperlinkedModelSerializer):
+class BrTitleInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = BrTitleInfo
-        fields = ['platplc'
-                  '', 'sigungucd', 'bjdongcd', 'mgmbldrgstpk', 'archarea', 'grndflrcnt']
+        fields = '__all__'
 
 
 class RealtorsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Realtors
-        fields = ['biz_name', 'biz_tel', 'rep_name', 'rep_tel', 'dongcd', 'rnmgtsn', 'addr_raw', 'full_addr_jibun']
+        # fields = ['biz_name', 'biz_tel', 'rep_name', 'rep_tel', 'sggnm', 'bdmgtsn', 'dongcd', 'rnmgtsn',
+        #           'addr_raw', 'full_addr_jibun', 'full_addr_rn']
+        fields = '__all__'
 
 
 class UnitSerializer(serializers.ModelSerializer):

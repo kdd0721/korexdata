@@ -101,6 +101,7 @@ class BrTitleInfo(models.Model):
     ji = models.CharField(db_column='ji', max_length=4)  # 지
     mgmbldrgstpk = models.CharField(db_column='mgmBldrgstPk', primary_key=True, max_length=33)  # 관리건축물대장PK
     archarea = models.CharField(db_column='archArea', max_length=45, blank=True, null=True)  # 건축면적
+    mainpurpscdnm = models.CharField(db_column='mainPurpsCdNm', max_length=100, blank=True, null=True)  # 주용도코드명
     grndflrcnt = models.IntegerField(db_column='grndFlrCnt', blank=True, null=True)  # 지상층수
 
     class Meta:
@@ -148,9 +149,7 @@ class Realtors(models.Model):
     full_addr_jibun = models.CharField(max_length=200, blank=True, null=True)
     bdmgtsn = models.CharField(db_column='bdMgtSn', max_length=25, blank=True, null=True)  # Field name made lowercase.
     srlno = models.CharField(db_column='srlNo', max_length=3, blank=True, null=True)  # Field name made lowercase.
-    # dongcd = models.CharField(db_column='dongCd', max_length=10, blank=True, null=True)  # Field name made lowercase.
     dongcd = models.ForeignKey('Units', on_delete=models.CASCADE, related_name='realtors_emd', db_column='dongCd')
-    # rnmgtsn = models.CharField(db_column='rnMgtSn', max_length=12, blank=True, null=True)  # Field name made lowercase.
     rnmgtsn = models.ForeignKey('Units', on_delete=models.CASCADE, related_name='realtors_road', db_column='rnMgtSn')
     emdno = models.CharField(db_column='emdNo', max_length=2, blank=True, null=True)  # Field name made lowercase.
 
